@@ -226,7 +226,48 @@ join departments d
 on s.DepartmentID=d.DepartmentID
 where DepartmentName='physics';
 
+-- 13. Retrieve all instructors from the Business Administration on department.
+update departments set DepartmentName="business administration" where departmentid=9;
+select *
+from instructors i
+join departments d
+on i.DepartmentID=d.DepartmentID
+where DepartmentName="business administration";
+
+-- 14. Find students whose phone number starts with '9876.
+ select * from students
+ where phone like "%9876%";
+ 
+ -- 15. Retrieve all books loaned out but not yet returned (ReturnDate IS NULL).
+ select * from bookloans
+ where ReturnDate is null;
+ 
+ -- 16. Show all enrollments where the grade is either 'A' or 'B.'
+ select * from enrollments
+where grade='b' or 'a';
+ 
+--  17. Find all books with the word "Principles" in their title.
+ select * from library
+ where title like "%principles%";
+ 
+ -- 18. Retrieve all students whose email domain is example.com.
+ select * from students
+ where email like "%.com%";
+ 
+ -- 19. List all departments with names starting with "C."
+ select * from departments
+ where DepartmentName like "c%";
+ 
+ -- 20. Find students born between 2001-01-01 and 2002-12-31.
+ select * from students
+ WHERE DateOfBirth BETWEEN "2001-01-01" AND "2002-12-31";
+ 
+ 
+ 
+ 
+select * from students;
+select * from departments;
 
 
 
- select * from departments;
+
