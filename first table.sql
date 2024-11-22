@@ -262,11 +262,148 @@ where grade='b' or 'a';
  select * from students
  WHERE DateOfBirth BETWEEN "2001-01-01" AND "2002-12-31";
  
+ -- 3. Sorting(ORDER BY)
+-- 21. List all courses sorted alphabetically by course name.
+select * 
+from courses
+ order by CourseName;
  
+ -- 22. Display students sorted by their last name in descending order.
+ select *
+ from students
+ order by lastname desc;
  
+ -- 23. Retrieve instructors sorted by their hire date (earliest first).
+ select * from instructors
+ order by hiredate asc;
  
-select * from students;
-select * from departments;
+ -- 24. List books sorted by their title.
+ select * from library
+ order by title;
+ update library set title="Introduction to algorithms" where Bookid=1;
+ 
+ -- 25. Retrieve the latest 5 enrollments based on enrollment date.
+ select * from enrollments
+ order by EnrollmentDate desc limit 5;
+
+-- 4. Aggregate Functions
+-- 26. Count the total number of students in the database.
+select count(LastName)
+from students;
+
+-- 27. Find the average number of credits for all courses.
+select avg(credits)
+from courses;
+
+-- 28. Count the total number of books in the Library table.
+select count(title) from library;
+ 
+ -- 29. Find the earliest hire date among all instructors.
+ select * from instructors
+ order by hiredate desc limit 5;
+ 
+ -- 30. Calculate the number of students enrolled in each course.
+ select * from enrollments;
+ 
+ SELECT 
+    c.CourseName,
+    COUNT(e.StudentID) AS EnrolledStudents
+FROM 
+    Courses c
+LEFT JOIN 
+    Enrollments e
+ON 
+    c.CourseID = e.CourseID
+GROUP BY 
+    c.CourseID, c.CourseName
+ORDER BY 
+    EnrolledStudents DESC;
+    
+-- 5. Grouping (GROUP BY) 
+-- 31. Group students by their department and count the number of students in each.
+select count(firstname),departmentid
+from students
+group by firstname, DepartmentID;
+
+-- 32. Find the number of courses offered by each department.
+select count(CourseName),departmentid
+from courses
+group by DepartmentID;
+
+-- 33. Retrieve the total number of male and female students.
+select count(gender),gender
+ from students
+group by gender;
+
+-- 34. Count the number of books authored by each author.
+select count(title),author
+ from library
+group by Author;
+
+-- 35. List each grade along with the number of students who received it.
+select grade,count(s.StudentID)
+from students s
+join enrollments e 
+on s.StudentID=e.StudentID
+group by e.grade
+;
+
+-- 6. Joins 
+-- 36. Retrieve the names of students and the departments they belong to.
+select concat(firstname,lastname),departmentname
+from students s
+join departments d
+on s.StudentID=d.Departmentid
+;
+-- 37. List all courses along with their respective departments.
+select CourseName,departmentname
+from courses c
+join departments d
+on c.DepartmentID=d.DepartmentID;
+
+-- 38. Display the names of instructors and the courses they teach.
+select firstname,coursename 
+from instructors w
+join courses r
+on w.DepartmentID=r.DepartmentID;
+
+-- 39. Retrieve the names of students and the books they have borrowed.
+select concat(firstname,lastname) as name,title
+from students s
+join library l
+on s.DepartmentID=l.DepartmentID
+;
+-- 40. List all students and the courses they are enrolled in.
+select firstname,CourseName
+from students s
+join courses c
+on s.DepartmentID=c.DepartmentID;
+
+-- 8. Modifying Data (INSERT, UPDATE, DELETE) 
+-- 46. Add a new student named "Maya Patel" to the Students table.
+insert into students values('Maya','Patel', '2000-08-17', 'F', 9876543220, 'mayapatel.lightblue@example.com', 6);
+
+-- 47. Update the grade for all students in "Quantum Mechanics" to 'B.'
+update enrollments set grade='B'
+where studentid in 
+(select s.studentid
+from students s join departments d on s.DepartmentID=d.DepartmentID where DepartmentName="Biology");
+
+-- 48. Delete all enrollments where the grade is 'F.'
+SET SQL_SAFE_UPDATES = 0;
+
+delete from enrollments
+where grade='B';
+select * from enrollments;
+
+
+
+
+
+ 
+select * from departments
+;
+select * from enrollments;
 
 
 
