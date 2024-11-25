@@ -390,19 +390,85 @@ where studentid in
 from students s join departments d on s.DepartmentID=d.DepartmentID where DepartmentName="Biology");
 
 -- 48. Delete all enrollments where the grade is 'F.'
-SET SQL_SAFE_UPDATES = 0;
 
 delete from enrollments
 where grade='B';
 select * from enrollments;
 
+-- 49. Add a new course called "Machine Learning" to the Computer Science department.
+
+-- 50. Remove all books authored by "James W. Nilsson."
+delete from library
+where Author="James W. Nilsson";
 
 
+-- Intermediate Queries 
+-- 1. Advanced Data Retrieval 
+-- 1. Retrieve the full names of students with their department names.
+select concat(firstname,lastname) fullname,departmentname 
+from students s
+join departments d
+on s.DepartmentID=d.DepartmentID;
+
+-- 2. Find students who are enrolled in multiple courses.
+insert into enrollments values(70,1,3,13,'2024-03-08','B');
+select * from students where studentid
+in (select studentid from 
+(select count(e.courseid) as count_courses,e.StudentID from students s
+join enrollments e
+on s.StudentID=e.StudentID
+group by e.studentid) as count_stus where count_courses>1);
+
+-- 3. List all instructors who teach at least one course with 4 credits.
+select * from 
+(select concat(firstname,lastname) instructor,credits 
+from instructors i
+join courses c
+on i.DepartmentID=c.DepartmentID
+group by c.DepartmentID);
+ select firstname from instructors
+ where DepartmentID 
+ in (select DepartmentID from courses
+ where Credits=4);
+
+
+update courses set coursename="Genetics" where courseid=8;
+update courses set coursename="Marketing Principles" where courseid=9;
+
+-- 4. Retrieve the names of all students who have borrowed more than 3 books.
+insert  into bookloans values(11,1,1,'2023-10-01','2023-10-15');
+
+SELECT s.FirstName,bb.book
+FROM (
+SELECT studentid,count(*) as book
+FROM bookloans
+GROUP BY studentid
+having book>1
+) AS bb
+JOIN students AS s
+ON bb.studentid = s.studentid;
+
+-- 5. Show the details of students who have received the same grade in more than one course.
+select s.*
+from(
+SELECT studentid, grade, COUNT(*) AS grade1
+FROM enrollments e
+GROUP BY studentid, grade
+HAVING grade1 >=1)
+as mm
+join students s
+on mm.StudentID=s.StudentID
+JOIN enrollments AS e
+ON mm.studentid = e.studentid AND mm.grade = e.grade;
 
 
  
-select * from departments
-;
+select * from students;
+select * from bookloans;
+select * from courses;
+select * from departments;
+select * from library;
+select * from instructors;
 select * from enrollments;
 
 
