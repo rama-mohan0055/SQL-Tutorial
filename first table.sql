@@ -461,7 +461,37 @@ on mm.StudentID=s.StudentID
 JOIN enrollments AS e
 ON mm.studentid = e.studentid AND mm.grade = e.grade;
 
+-- 6. Find the titles of all books borrowed by students in the Computer Science department.
+SELECT b.Title
+FROM library b
+JOIN Students s 
+ON b.DepartmentID = s.departmentID
+WHERE b.Departmentid = 'Computer Science';
 
+-- 7. List all students who enrolled in a course taught by "Dr. Alan Turing."
+select * from students
+where StudentID in
+(select e.StudentID from  enrollments e
+join instructors i 
+on i.InstructorID=e.InstructorID
+where i.LastName="Turing");
+
+-- 8. Retrieve courses that are taught in more than one department.
+insert into courses values(13,'Data Structures',4,8);
+select c.CourseID,c.CourseName from courses c
+join departments d
+on c.DepartmentID=d.DepartmentID
+group by c.CourseID,c.CourseName
+having count(d.DepartmentID)>1;
+
+
+
+ 
+ 
+ 
+ 
+ 
+ 
  
 select * from students;
 select * from bookloans;
