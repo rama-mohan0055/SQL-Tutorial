@@ -378,6 +378,50 @@ select firstname,CourseName
 from students s
 join courses c
 on s.DepartmentID=c.DepartmentID;
+-- 7. Subqueries 
+-- 41. Find the names of students who are enrolled in the course "Data Structures."
+
+SELECT firstname
+FROM Students
+WHERE studentid IN (
+        SELECT courseid
+        FROM Courses
+        WHERE coursename = 'Data Structures'
+);
+
+-- 42. Retrieve the department with the maximum number of courses
+
+SELECT departmentname
+FROM Departments
+WHERE departmentid = (
+    SELECT departmentid
+    FROM Courses
+    GROUP BY departmentid
+    ORDER BY COUNT(*) desc
+    LIMIT 1
+);
+
+-- 43. Find students who have not borrowed any books.
+
+SELECT departmentid, FirstName
+FROM students
+WHERE DepartmentID NOT IN (
+    SELECT DISTINCT departmentid
+    FROM library
+);
+-- 44. List courses that have no enrollments.
+select CourseID,CourseName from courses
+where CourseID not in (select distinct CourseID from enrollments);
+-- 45. Find the most recently loaned book.
+select  BookID,title from library
+where BookID=(select BookID from bookloans order by LoanDate desc limit 1);
+
+
+
+select* from library
+;
+
+
 
 -- 8. Modifying Data (INSERT, UPDATE, DELETE) 
 -- 46. Add a new student named "Maya Patel" to the Students table.
@@ -483,6 +527,17 @@ join departments d
 on c.DepartmentID=d.DepartmentID
 group by c.CourseID,c.CourseName
 having count(d.DepartmentID)>1;
+
+-- 9. Find books that were loaned out and returned on the same day.
+insert into bookloans values(12,1,1,'2023-10-25','2023-10-25');
+select * from bookloans s
+where s.LoanDate=s.ReturnDate;
+
+-- 10. List students who have not enrolled in any courses.
+select s.StudentID,s.firstname from students s
+left join enrollments e
+on s.StudentID=e.StudentID
+where s.StudentID is null;
 
 
 
