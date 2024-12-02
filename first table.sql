@@ -539,12 +539,44 @@ left join enrollments e
 on s.StudentID=e.StudentID
 where s.StudentID is null;
 
+-- 2. Filtering with Multiple Conditions
+-- 11. Retrieve courses with 3 or 4 credits offered by the Mathematics department
+update departments set departmentname="Mathematics" where DepartmentID=5;
+select c.CourseName,c.courseid,d.DepartmentName from courses c
+join departments d
+on c.DepartmentID=d.DepartmentID
+where d.DepartmentName="Mathematics"
+and c.Credits in (3,4);
+
+-- 12. Find students whose last name starts with "W" and who are in the Physics department.
+ SELECT s.lastname,d.DepartmentName from  students s
+ JOIN departments d
+ ON s.DepartmentID=d.DepartmentID
+ WHERE s.LastName LIKE "W%"
+ AND d.DepartmentName="Mathematics";
+ 
+ -- 13. List all books where the title contains "Introduction" but excludes "Advanced."
+ SELECT bookid,title,author,ISBN
+FROM library
+WHERE title LIKE '%Introduction%' 
+    AND title NOT LIKE '%Advanced%';
+-- 14. Retrieve all enrollments where the grade is not 'A' or 'B.'
+SELECT * FROM enrollments
+WHERE grade NOT IN ('A','B');
+
+-- 15. Find instructors who were hired after 2010 and belong to the Electrical Engineering department.
+SELECT i.instructorid,i.firstname,i.lastname,i.hiredate,
+    d.departmentname
+FROM instructors i
+JOIN departments d
+ON i.departmentid = d.departmentid
+WHERE 
+    i.hiredate > '2010-12-31'
+    AND d.departmentname = 'Electrical Engineering';
 
 
- 
- 
- 
- 
+
+
  
  
  
